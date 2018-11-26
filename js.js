@@ -27,6 +27,7 @@ window.onload = function(){
 	document.getElementById("hide").onclick = function(){devOptHide()};
 	document.getElementById("pause").onclick = function(){devOptPause()};
 	document.getElementById("lvlTres").onclick = function(){devOptLvlTres()};
+	document.getElementById("lvlSeis").onclick = function(){devOptLvlSeis()};
 	let container = document.getElementById('container');
 	window.addEventListener('keydown',keysPressed,false);
 	window.addEventListener('keyup',keysReleased,false);
@@ -84,37 +85,7 @@ function keysReleased(event){
 	}
 }
 
-function showDeveloperOptions(){
-	document.getElementById("developerOptions").style.display = "block";
-}
 
-function devOptWin(){
-	enemies = [];
-	if(lvl == 3 || lvl == 6) fboss.hp = 0;
-}
-
-function devOptLose(){
-	ship.hp = 0;
-}
-
-function devOptHide(){
-	document.getElementById("developerOptions").style.display = "none";
-}
-
-function devOptPause(){
-	if(document.getElementById("pause").firstChild.data == "pause"){
-		clearInterval(myCanvas.interval);
-		document.getElementById("pause").firstChild.data = "unpause";
-	} else{
-		document.getElementById("pause").firstChild.data = "pause";
-		myCanvas.start();
-	}
-}
-
-function devOptLvlTres(){
-	lvl = 2;
-	enemies = [];
-}
 
 function mainLoop(){
 	myCanvas.clear();
@@ -157,7 +128,30 @@ function mainLoop(){
 	checkGameStatus();
 }
 
+/*function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function demo(a) {
+  console.log('Taking a break...');
+  await sleep(2000);
+  console.log('Two seconds later');
+  a = true;
+}*/
+
+
+
 function checkGameStatus(){
+	if(ship.hp <= 0){
+		myCanvas.clear();
+		count = 0;
+		enemies = [];
+		enemyBullets = [];
+		delete ship;
+		clearInterval(myCanvas.interval);
+		console.log("You lost!");
+		setTimeout(function(){}, 3000);
+	}
 	if(lvl == 3 || lvl == 6){
 		if(fboss.hp <= 0){
 			myCanvas.clear();
@@ -167,38 +161,48 @@ function checkGameStatus(){
 			delete ship;
 			delete fboss;
 			clearInterval(myCanvas.interval);
-			lvl++;
-			startGame();
+			console.log("You win!");
+			console.log("Starting...");
+			setTimeout(function(){			
+				lvl++;
+				startGame();
+			}, 3000);
+			
 		}
 	} else {
-		if(enemies.length == 0){
-			myCanvas.clear();
-			count = 0;
-			enemies = [];
-			enemyBullets = [];
-			delete ship;
-			clearInterval(myCanvas.interval);
-			lvl++;
-			startGame();
-		}
 		if(lvl == 4 || lvl == 5){
 			for(let i = 0; i < enemies.length; i++){
 				if(enemies[i].y >= 480){
 					enemies.splice(i,1);
 				}
 			}
-		}
+			if(enemies.length == 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You lost!");
+				setTimeout(function(){}, 3000);
+			}
+		} else {
+			if(enemies.length == 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You win!");
+				console.log("Starting...");
+				setTimeout(function(){			
+					lvl++;
+					startGame();
+				}, 3000);
+			}
+		}		
 	}
-	if(ship.hp <= 0){
-		myCanvas.clear();
-		count = 0;
-		enemies = [];
-		enemyBullets = [];
-		delete ship;
-		clearInterval(myCanvas.interval);
-	}
-
-
 }
 
 function genEnemies(){
@@ -218,6 +222,11 @@ function isObject(val) {
     return ( (typeof val === 'function') || (typeof val === 'object') );
 }
 
+
+
+  //////////////////
+ ///CONSTRUCTORS///
+//////////////////
 
 function spaceship(x,y,width,height){
 	this.x = x;
@@ -377,6 +386,7 @@ function boss(x,y,width,height){
 		if(this.x >= 410){
 			this.speed = -6;
 		}
+		if(lvl == 6) this.y += .1;
 	}
 
 	this.shoot = function(){
@@ -391,6 +401,48 @@ function boss(x,y,width,height){
 			}
 		}
 	}
+}
 
 
+  ///////////////////////
+ ///DEVELOPER OPTIONS///
+///////////////////////
+
+function showDeveloperOptions(){
+	document.getElementById("developerOptions").style.display = "block";
+}
+
+function devOptWin(){
+	enemies = [];
+	if(lvl == 3 || lvl == 6) fboss.hp = 0;
+}
+
+function devOptLose(){
+	ship.hp = 0;
+}
+
+function devOptHide(){
+	document.getElementById("developerOptions").style.display = "none";
+}
+
+function devOptPause(){
+	if(document.getElementById("pause").firstChild.data == "pause"){
+		clearInterval(myCanvas.interval);
+		document.getElementById("pause").firstChild.data = "unpause";
+	} else{
+		document.getElementById("pause").firstChild.data = "pause";
+		myCanvas.start();
+	}
+}
+
+function devOptLvlTres(){
+	if(lvl == 3 || lvl == 6) fboss.hp = 0; 
+	lvl = 2;
+	enemies = [];
+}
+
+function devOptLvlSeis(){
+	if(lvl == 3 || lvl == 6) fboss.hp = 0; 
+	lvl = 5;
+	enemies = [];
 }
