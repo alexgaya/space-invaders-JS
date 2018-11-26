@@ -157,7 +157,95 @@ function checkGameStatus(){
 		console.log("You lost!");
 		setTimeout(function(){}, 3000);
 	}
-	if(lvl == 3 || lvl == 6){
+
+	switch(lvl){
+		case 1:
+		case 2:
+			if(enemies.length == 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You win!");
+				console.log("Starting...");
+				nextLevelScreen()
+				setTimeout(function(){			
+					lvl++;
+					startGame();
+				}, 3000);
+			}
+			break;
+		case 3:
+		case 6:
+			if(fboss.hp <= 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				delete fboss;
+				clearInterval(myCanvas.interval);
+				console.log("You win!");
+				console.log("Starting...");
+				nextLevelScreen()
+				setTimeout(function(){			
+					lvl++;
+					startGame();
+				}, 3000);
+				break;
+			}
+
+			if(fboss.y >= 420){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete fboss;
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You lost!");
+				setTimeout(function(){}, 3000);
+			}
+			break;
+		case 4:
+		case 5:
+			if(enemies.length == 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You Win!");
+				console.log("Starting...");
+				nextLevelScreen()
+				setTimeout(function(){
+					lvl++;
+					startGame();
+				}, 3000);
+				break;
+			}
+
+			for(let i = 0; i < enemies.length; i++){
+				if(enemies[i].y >= 480){
+					enemies.splice(i,1);
+					myCanvas.clear();
+					count = 0;
+					enemies = [];
+					enemyBullets = [];
+					delete ship;
+					clearInterval(myCanvas.interval);
+					console.log("You lost!");
+					setTimeout(function(){}, 3000);
+					break;
+				}
+			}
+			break;
+	}
+
+	/*if(lvl == 3 || lvl == 6){
 		if(fboss.hp <= 0){
 			myCanvas.clear();
 			count = 0;
@@ -172,17 +260,36 @@ function checkGameStatus(){
 			setTimeout(function(){			
 				lvl++;
 				startGame();
-			}, 3000);
-			
+			}, 3000);	
+		}
+		if(fboss.y >= 420){
+			myCanvas.clear();
+			count = 0;
+			enemies = [];
+			enemyBullets = [];
+			delete fboss;
+			delete ship;
+			clearInterval(myCanvas.interval);
+			console.log("You lost!");
+			setTimeout(function(){}, 3000);
 		}
 	} else {
-		//ERROR HERE
 		if(lvl == 4 || lvl == 5){
 			for(let i = 0; i < enemies.length; i++){
 				if(enemies[i].y >= 480){
 					enemies.splice(i,1);
+					myCanvas.clear();
+					count = 0;
+					enemies = [];
+					enemyBullets = [];
+					delete ship;
+					clearInterval(myCanvas.interval);
+					console.log("You lost!");
+					setTimeout(function(){}, 3000);
+					break;
 				}
 			}
+
 			if(enemies.length == 0){
 				myCanvas.clear();
 				count = 0;
@@ -190,8 +297,13 @@ function checkGameStatus(){
 				enemyBullets = [];
 				delete ship;
 				clearInterval(myCanvas.interval);
-				console.log("You lost!");
-				setTimeout(function(){}, 3000);
+				console.log("You Win!");
+				console.log("Starting...");
+				nextLevelScreen()
+				setTimeout(function(){
+					lvl++;
+					startGame();
+				}, 3000);
 			}
 		} else {
 			if(enemies.length == 0){
@@ -210,7 +322,7 @@ function checkGameStatus(){
 				}, 3000);
 			}
 		}		
-	}
+	}*/
 }
 
 function genEnemies(){
@@ -394,7 +506,7 @@ function boss(x,y,width,height){
 		if(this.x >= 410){
 			this.speed = -6;
 		}
-		if(lvl == 6) this.y += .1;
+		if(lvl == 6) this.y += 1;
 	}
 
 	this.shoot = function(){
