@@ -1,0 +1,19 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+#container{
+	width: 500px;
+	height: 500px;
+	margin: auto;
+	margin-top: 30px;
+	
+}
+canvas{
+	background-color: grey;
+}
+#developerOptions{
+	margin-top: 10px;
+	text-align: center;
+	/*display: none;*/
+}
