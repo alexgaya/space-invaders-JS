@@ -139,7 +139,12 @@ async function demo(a) {
   a = true;
 }*/
 
-
+function nextLevelScreen(){
+	let ctx = myCanvas.context;
+	ctx.font = "30px Arial";
+	ctx.fillStyle = "red";
+	ctx.fillText("Loading level " + (lvl + 1), 150, 250);
+}
 
 function checkGameStatus(){
 	if(ship.hp <= 0){
@@ -163,6 +168,7 @@ function checkGameStatus(){
 			clearInterval(myCanvas.interval);
 			console.log("You win!");
 			console.log("Starting...");
+			nextLevelScreen()
 			setTimeout(function(){			
 				lvl++;
 				startGame();
@@ -170,6 +176,7 @@ function checkGameStatus(){
 			
 		}
 	} else {
+		//ERROR HERE
 		if(lvl == 4 || lvl == 5){
 			for(let i = 0; i < enemies.length; i++){
 				if(enemies[i].y >= 480){
@@ -196,6 +203,7 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You win!");
 				console.log("Starting...");
+				nextLevelScreen()
 				setTimeout(function(){			
 					lvl++;
 					startGame();
