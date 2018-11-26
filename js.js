@@ -20,6 +20,9 @@ let keys = [];
 let enemies = [];
 let count = 0;
 let lvl = 1;
+let name;
+//let points = 0;
+let bestScore = 0;
 
 window.onload = function(){
 	document.getElementById("win").onclick = function(){devOptWin()};
@@ -80,12 +83,53 @@ function keysPressed(event){
 
 function keysReleased(event){
 	keys[event.keyCode] = false;
-	if(keys[32] == false) {
-		count = 0;
-	}
+	if(keys[32] == false) count = 0;
 }
 
+function showRanking(){
 
+	let ctx = myCanvas.context;
+	ctx.font = "30px Arial";
+	ctx.fillStyle = "red";
+
+	let array = document.cookie.split('; ');
+	let cookieName, cookieValue;
+	let temp;
+	let position = 10;
+
+	for(let i = 0; i < array.length; i++) {
+		temp = array[i].split('=');
+		cookieName = temp[0];
+		cookieValue = temp[1];
+
+		ctx.fillText(cookieName "  " cookieValue, 10, position);
+		position += 10;
+
+		//cookies selector de color de fondo
+		/*if(cookieName == "color-fondo"){
+			document.body.style.backgroundColor = cookieValue;
+		}
+
+		//cookies input type text
+		if(cookieName == "nombre"){
+			document.getElementById('texto').value = cookieValue;
+		}
+
+		//cookies imágenes
+		for(let j = 0; j < 4; j++){
+			if(cookieName == "img"+j){
+				document.getElementById(cookieValue).style.display = "none";
+			}
+		}*/
+	}
+
+	/*let ctx = myCanvas.context;
+	ctx.font = "30px Arial";
+	ctx.fillStyle = "red";
+	ctx.fillText("Loading level " + (lvl + 1), 150, 250);*/
+
+
+}
 
 function mainLoop(){
 	myCanvas.clear();
