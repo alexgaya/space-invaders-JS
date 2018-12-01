@@ -10,9 +10,9 @@
 
 
 
-- Funcionalidades:  
+ Funcionalidades:  
 
-- (MÍNIMOS)
+ (MÍNIMOS)
 - Capacidad de disparar (DONE)
 - Capacidad de moverse (DONE)
 - Ganar al eliminar a todos los enemigos (DONE)
@@ -21,7 +21,7 @@
 - Niveles (DONE)
 - Ranking reseteable (DONE)  
 
-- (OPCIONALES)
+ (OPCIONALES)
 - Sonidos y/o música
 - Varias municiones propias y/o enemigas
 - Varias naves con capacidades diferentes; vidas, armas, velocidades
