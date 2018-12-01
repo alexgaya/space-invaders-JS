@@ -10,7 +10,7 @@
 
 
 
-- Funcionalidades:
+- Funcionalidades:  
 
 - (MÍNIMOS)
 - Capacidad de disparar (DONE)
@@ -19,7 +19,7 @@
 - Enemigos que se desplazan (DONE)
 - Perder al ser impactado por disparos enemigos, colisionar o que un enemigo llegue al inferior del área del juego (DONE)
 - Niveles (DONE)
-- Ranking reseteable (DONE)
+- Ranking reseteable (DONE)  
 
 - (OPCIONALES)
 - Sonidos y/o música
