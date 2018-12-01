@@ -21,7 +21,7 @@ let enemies = [];
 let count = 0;
 let lvl = 1;
 let name;
-//let points = 0;
+let points = 0;
 let bestScore = 0;
 
 window.onload = function(){
@@ -102,8 +102,8 @@ function showRanking(){
 		cookieName = temp[0];
 		cookieValue = temp[1];
 
-		ctx.fillText(cookieName "  " cookieValue, 10, position);
-		position += 10;
+		ctx.fillText(cookieName + "  " + cookieValue, 10, position);
+		position += 20;
 
 		//cookies selector de color de fondo
 		/*if(cookieName == "color-fondo"){
@@ -150,6 +150,7 @@ function mainLoop(){
 				if(enemyBullets[i].hit()){
 					enemyBullets.splice(i,1);
 					ship.hp--;
+					points -= 100;
 				}
 		}
 	}
@@ -190,21 +191,33 @@ function nextLevelScreen(){
 	ctx.fillText("Loading level " + (lvl + 1), 150, 250);
 }
 
-function checkGameStatus(){
-	if(ship.hp <= 0){
-		myCanvas.clear();
-		count = 0;
-		enemies = [];
-		enemyBullets = [];
-		delete ship;
-		clearInterval(myCanvas.interval);
-		console.log("You lost!");
-		setTimeout(function(){}, 3000);
-	}
+function youLost(){
+	let ctx = myCanvas.context;
+	ctx.font = "30px Arial";
+	ctx.fillStyle = "red";
+	ctx.fillText("You lost!", 200, 250);
+	document.cookie = `${name}=${points}`;
+}
 
+
+function checkGameStatus(){
 	switch(lvl){
 		case 1:
 		case 2:
+			if(ship.hp <= 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You lost!");
+				youLost();
+				setTimeout(function(){
+					showRanking();
+				}, 3000);
+				break;
+			}
 			if(enemies.length == 0){
 				myCanvas.clear();
 				count = 0;
@@ -214,7 +227,7 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You win!");
 				console.log("Starting...");
-				nextLevelScreen()
+				nextLevelScreen();
 				setTimeout(function(){			
 					lvl++;
 					startGame();
@@ -223,6 +236,20 @@ function checkGameStatus(){
 			break;
 		case 3:
 		case 6:
+			if(ship.hp <= 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You lost!");
+				youLost();
+				setTimeout(function(){
+					showRanking();
+				}, 3000);
+				break;
+			}
 			if(fboss.hp <= 0){
 				myCanvas.clear();
 				count = 0;
@@ -233,7 +260,7 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You win!");
 				console.log("Starting...");
-				nextLevelScreen()
+				nextLevelScreen();
 				setTimeout(function(){			
 					lvl++;
 					startGame();
@@ -250,11 +277,28 @@ function checkGameStatus(){
 				delete ship;
 				clearInterval(myCanvas.interval);
 				console.log("You lost!");
-				setTimeout(function(){}, 3000);
+				youLost();
+				setTimeout(function(){
+					showRanking();
+				}, 3000);
 			}
 			break;
 		case 4:
 		case 5:
+			if(ship.hp <= 0){
+				myCanvas.clear();
+				count = 0;
+				enemies = [];
+				enemyBullets = [];
+				delete ship;
+				clearInterval(myCanvas.interval);
+				console.log("You lost!");
+				youLost();
+				setTimeout(function(){
+					showRanking();
+				}, 3000);
+				break;
+			}
 			if(enemies.length == 0){
 				myCanvas.clear();
 				count = 0;
@@ -264,7 +308,7 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You Win!");
 				console.log("Starting...");
-				nextLevelScreen()
+				nextLevelScreen();
 				setTimeout(function(){
 					lvl++;
 					startGame();
@@ -282,7 +326,10 @@ function checkGameStatus(){
 					delete ship;
 					clearInterval(myCanvas.interval);
 					console.log("You lost!");
-					setTimeout(function(){}, 3000);
+					youLost();
+					setTimeout(function(){
+						showRanking();
+					}, 3000);
 					break;
 				}
 			}
@@ -443,6 +490,7 @@ function spaceship(x,y,width,height){
 			for(let j = 0; j < enemies.length; j++){
 				if(this.bullets[i].hit(enemies[j])){
 					enemies.splice(j,1);
+					points += 100;
 					this.bullets.splice(i,1);
 					break;	
 				}
@@ -455,6 +503,7 @@ function spaceship(x,y,width,height){
 			if(this.bullets[i].hit("boss")){
 				this.bullets.splice(i,1);
 				fboss.hp--;
+				points += 200;
 			}
 		}
 	}
@@ -550,7 +599,7 @@ function boss(x,y,width,height){
 		if(this.x >= 410){
 			this.speed = -6;
 		}
-		if(lvl == 6) this.y += 1;
+		if(lvl == 6) this.y += .1;
 	}
 
 	this.shoot = function(){
@@ -562,6 +611,7 @@ function boss(x,y,width,height){
 			if(this.bullets[i].hit()){
 				this.bullets.splice(i,1);
 				ship.hp--;
+				points -= 100;
 			}
 		}
 	}
