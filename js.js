@@ -25,16 +25,17 @@ let points = 0;
 let bestScore = 0;
 
 window.onload = function(){
+	document.getElementById("button").onclick = function(){setName()};
 	document.getElementById("win").onclick = function(){devOptWin()};
 	document.getElementById("lose").onclick = function(){devOptLose()};
 	document.getElementById("hide").onclick = function(){devOptHide()};
 	document.getElementById("pause").onclick = function(){devOptPause()};
 	document.getElementById("lvlTres").onclick = function(){devOptLvlTres()};
 	document.getElementById("lvlSeis").onclick = function(){devOptLvlSeis()};
+	document.getElementById("deleteAllCookies").onclick = function(){devOptDeleteAllCookies()};
 	let container = document.getElementById('container');
 	window.addEventListener('keydown',keysPressed,false);
 	window.addEventListener('keyup',keysReleased,false);
-	startGame();
 }
 
 function startGame(){
@@ -72,8 +73,7 @@ function startGame(){
 		default: 
 			break;
 	}
-	console.log("Game started");
-	console.log(`Actual level: ${lvl}`);
+	console.log(`Game started \nActual level: ${lvl}`);
 	myCanvas.start();
 }
 
@@ -86,6 +86,39 @@ function keysReleased(event){
 	if(keys[32] == false) count = 0;
 }
 
+function deleteCookie(name) {
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function setName(){
+	name = document.getElementById("name").value;
+	console.log(`Player name: ${name.toUpperCase()}`);
+	document.getElementById("setName").style.display = "none";
+	startGame();
+}
+
+function bubble(a){
+	let swap = true;
+	let j = 0;
+	while(swap){
+		swap = false;
+		for(let i = 1; i < a.length - j; i++){
+			if(parseInt(a[i].split('=')[1]) > parseInt(a[i - 1].split('=')[1])){
+				let aux = a[i];
+				a[i] = a[i - 1];
+				a[i - 1] = aux;
+				swap = true;
+			}
+		}
+		j++;
+	}
+	console.log(`Ranking:`);
+	for(let i = 0; i < a.length; i++){
+		console.log(a[i]);
+	}
+	return a;
+}
+
 function showRanking(){
 
 	let ctx = myCanvas.context;
@@ -94,41 +127,17 @@ function showRanking(){
 
 	let array = document.cookie.split('; ');
 	let cookieName, cookieValue;
-	let temp;
-	let position = 10;
+	let position = 40;
 
-	for(let i = 0; i < array.length; i++) {
-		temp = array[i].split('=');
-		cookieName = temp[0];
-		cookieValue = temp[1];
+	array = bubble(array);
 
-		ctx.fillText(cookieName + "  " + cookieValue, 10, position);
-		position += 20;
+	for(let i = 0; i < array.length; i++){
+		cookieName = array[i].split('=')[0];
+		cookieValue = array[i].split('=')[1];
 
-		//cookies selector de color de fondo
-		/*if(cookieName == "color-fondo"){
-			document.body.style.backgroundColor = cookieValue;
-		}
-
-		//cookies input type text
-		if(cookieName == "nombre"){
-			document.getElementById('texto').value = cookieValue;
-		}
-
-		//cookies imágenes
-		for(let j = 0; j < 4; j++){
-			if(cookieName == "img"+j){
-				document.getElementById(cookieValue).style.display = "none";
-			}
-		}*/
+		ctx.fillText(cookieName + "  " + cookieValue + " points" +, 10, position);
+		position += 40;
 	}
-
-	/*let ctx = myCanvas.context;
-	ctx.font = "30px Arial";
-	ctx.fillStyle = "red";
-	ctx.fillText("Loading level " + (lvl + 1), 150, 250);*/
-
-
 }
 
 function mainLoop(){
@@ -173,17 +182,6 @@ function mainLoop(){
 	checkGameStatus();
 }
 
-/*function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function demo(a) {
-  console.log('Taking a break...');
-  await sleep(2000);
-  console.log('Two seconds later');
-  a = true;
-}*/
-
 function nextLevelScreen(){
 	let ctx = myCanvas.context;
 	ctx.font = "30px Arial";
@@ -196,6 +194,14 @@ function youLost(){
 	ctx.font = "30px Arial";
 	ctx.fillStyle = "red";
 	ctx.fillText("You lost!", 200, 250);
+	document.cookie = `${name}=${points}`;
+}
+
+function congratulations(){
+	let ctx = myCanvas.context;
+	ctx.font = "30px Arial";
+	ctx.fillStyle = "red";
+	ctx.fillText("Congratulations, you have won!", 50, 250);
 	document.cookie = `${name}=${points}`;
 }
 
@@ -227,10 +233,15 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You win!");
 				console.log("Starting...");
-				nextLevelScreen();
-				setTimeout(function(){			
-					lvl++;
-					startGame();
+				if(lvl <= 5) nextLevelScreen();
+				else congratulations();
+				setTimeout(function(){
+					if(lvl <= 5){
+						lvl++;
+						startGame();
+					} else{
+						showRanking();
+					}
 				}, 3000);
 			}
 			break;
@@ -260,10 +271,15 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You win!");
 				console.log("Starting...");
-				nextLevelScreen();
+				if(lvl <= 5) nextLevelScreen();
+				else congratulations();
 				setTimeout(function(){			
-					lvl++;
-					startGame();
+					if(lvl <= 5){
+						lvl++;
+						startGame();
+					} else{
+						showRanking();
+					}
 				}, 3000);
 				break;
 			}
@@ -308,10 +324,15 @@ function checkGameStatus(){
 				clearInterval(myCanvas.interval);
 				console.log("You Win!");
 				console.log("Starting...");
-				nextLevelScreen();
+				if(lvl <= 5) nextLevelScreen();
+				else congratulations();
 				setTimeout(function(){
-					lvl++;
-					startGame();
+					if(lvl <= 5){
+						lvl++;
+						startGame();
+					} else{
+						showRanking();
+					}
 				}, 3000);
 				break;
 			}
@@ -335,85 +356,6 @@ function checkGameStatus(){
 			}
 			break;
 	}
-
-	/*if(lvl == 3 || lvl == 6){
-		if(fboss.hp <= 0){
-			myCanvas.clear();
-			count = 0;
-			enemies = [];
-			enemyBullets = [];
-			delete ship;
-			delete fboss;
-			clearInterval(myCanvas.interval);
-			console.log("You win!");
-			console.log("Starting...");
-			nextLevelScreen()
-			setTimeout(function(){			
-				lvl++;
-				startGame();
-			}, 3000);	
-		}
-		if(fboss.y >= 420){
-			myCanvas.clear();
-			count = 0;
-			enemies = [];
-			enemyBullets = [];
-			delete fboss;
-			delete ship;
-			clearInterval(myCanvas.interval);
-			console.log("You lost!");
-			setTimeout(function(){}, 3000);
-		}
-	} else {
-		if(lvl == 4 || lvl == 5){
-			for(let i = 0; i < enemies.length; i++){
-				if(enemies[i].y >= 480){
-					enemies.splice(i,1);
-					myCanvas.clear();
-					count = 0;
-					enemies = [];
-					enemyBullets = [];
-					delete ship;
-					clearInterval(myCanvas.interval);
-					console.log("You lost!");
-					setTimeout(function(){}, 3000);
-					break;
-				}
-			}
-
-			if(enemies.length == 0){
-				myCanvas.clear();
-				count = 0;
-				enemies = [];
-				enemyBullets = [];
-				delete ship;
-				clearInterval(myCanvas.interval);
-				console.log("You Win!");
-				console.log("Starting...");
-				nextLevelScreen()
-				setTimeout(function(){
-					lvl++;
-					startGame();
-				}, 3000);
-			}
-		} else {
-			if(enemies.length == 0){
-				myCanvas.clear();
-				count = 0;
-				enemies = [];
-				enemyBullets = [];
-				delete ship;
-				clearInterval(myCanvas.interval);
-				console.log("You win!");
-				console.log("Starting...");
-				nextLevelScreen()
-				setTimeout(function(){			
-					lvl++;
-					startGame();
-				}, 3000);
-			}
-		}		
-	}*/
 }
 
 function genEnemies(){
@@ -659,4 +601,14 @@ function devOptLvlSeis(){
 	if(lvl == 3 || lvl == 6) fboss.hp = 0; 
 	lvl = 5;
 	enemies = [];
+}
+
+function devOptDeleteAllCookies(){
+	let cookies = document.cookie.split('; ');
+	let cookieName, cookieValue;
+	let temp;
+	for(let i = 0; i < cookies.length; i++){
+		deleteCookie(cookies[i].split('=')[0]);
+	}
+	console.log("All of the cookies have been deleted");
 }

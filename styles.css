@@ -17,3 +17,11 @@ canvas{
 	text-align: center;
 	/*display: none;*/
 }
+#setName{
+	height: 500px;
+	text-align: center;
+	padding-top: 100px;
+}
+#setName label{
+	margin-left: -140px;
+}
