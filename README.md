@@ -10,7 +10,7 @@
 
 
 
- Funcionalidades:  
+# Funcionalidades:  
 
  (MÍNIMOS)
 - Capacidad de disparar (DONE)
