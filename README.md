@@ -8,4 +8,4 @@
 # Opciones de desarrollador:
 
 - Cómo activarlas: Pulsa F12, abre la consola e introduce: showDeveloperOptions();
-- PELIGRO: Estas opciones están testeadas y funcionan bien, aún así, podrían originar un error en el juego y evitar el correcto desarrollo del mismo.
+- PELIGRO: Estas opciones están testeadas y funcionan bien, aun así, podrían originar un error en el juego y evitar el correcto desarrollo del mismo.
