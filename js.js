@@ -45,6 +45,7 @@ let points = 0;
 *Función que espera a que cargue la página y entonces lee js
 */
 window.onload = function(){
+	document.getElementById("reset").onclick = function(){location.reload()};
 	document.getElementById("button").onclick = function(){setName()};
 	document.getElementById("win").onclick = function(){devOptWin()};
 	document.getElementById("lose").onclick = function(){devOptLose()};
@@ -65,33 +66,33 @@ window.onload = function(){
 function startGame(){
 	switch(lvl){
 		case 1:
-			ship = new spaceship(240,480,20,20);
+			ship = new spaceship(240,480,20,20,"image","img/player.png");
 			genEnemies();
 			break;
 
 		case 2:
-			ship = new spaceship(240,480,20,20);
+			ship = new spaceship(240,480,20,20,"image","img/player.png");
 			genEnemies();
 			break;
 
 		case 3:
-			ship = new spaceship(240,480,20,20);
-			fboss = new boss(210,40,80,80);
+			ship = new spaceship(240,480,20,20,"image","img/player.png");
+			fboss = new boss(210,40,80,80,"image","img/boss.png");
 			break;
 
 		case 4: 
-			ship = new spaceship(240,480,20,20);
+			ship = new spaceship(240,480,20,20,"image","img/player.png");
 			genEnemies();
 			break;
 
 		case 5: 
-			ship = new spaceship(240,480,20,20);
+			ship = new spaceship(240,480,20,20,"image","img/player.png");
 			genEnemies();
 			break;
 
 		case 6: 
-			ship = new spaceship(240,480,20,20);
-			fboss = new boss(210,40,80,80);
+			ship = new spaceship(240,480,20,20,"image","img/player.png");
+			fboss = new boss(210,40,80,80,"image","img/boss.png");
 			break;
 
 		default: 
@@ -273,6 +274,7 @@ function youLost(){
 *Muestra en pantalla un mensaje de felicidades y crea la cookie
 */
 function congratulations(){
+	document.getElementById("reset").style.display = "block";
 	let ctx = myCanvas.context;
 	ctx.font = "30px Arial";
 	ctx.fillStyle = "red";
@@ -456,11 +458,11 @@ function checkGameStatus(){
 */
 function genEnemies(){
 	for(let i = 0; i < 11; i++){
-		enemies.push(new enemy(65+i*35,70,20,20));
+		enemies.push(new enemy(65+i*35,70,20,20,"image","img/enemy.png"));
 		for(let j = 0; j < 1; j++){
-			enemies.push(new enemy(65+i*35,40,20,20));
+			enemies.push(new enemy(65+i*35,40,20,20,"image","img/enemy.png"));
 			if(lvl == 2 || lvl == 5)
-			enemies.push(new enemy(65+i*35,100,20,20));
+			enemies.push(new enemy(65+i*35,100,20,20,"image","img/enemy.png"));
 		}
 	}
 }
@@ -491,7 +493,12 @@ function isObject(val) {
 *@param width  Ancho de la nave
 *@param height  Altura de la nave
 */
-function spaceship(x,y,width,height){
+function spaceship(x,y,width,height,type,ruta){
+	this.type = type;//trata si el objeto es de tipo imagen
+	if(type == "image"){
+		this.image = new Image();
+		this.image.src = ruta;
+	}
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -511,13 +518,16 @@ function spaceship(x,y,width,height){
 
 	/*Dibuja la nave del jugador*/
 	this.show = function(){
+		ctx = myCanvas.context;
+		if(type == "image"){//gestiona si es de tipo imágen
+			ctx.drawImage(this.image,this.x,this.y,this.width,this.height);
+		}else{
+			ctx.fillStyle = "blue";
+			ctx.fillRect(this.x,this.y,this.width,this.height);
+		}
 		//Evita que la nave se salga del canvas
 		if(this.x<0) this.x = 0;
 		if(this.x>500-this.width) this.x = 500 - this.width;
-
-		ctx = myCanvas.context;
-		ctx.fillStyle = "blue";
-		ctx.fillRect(this.x,this.y,this.width,this.height);
 	}
 
 	/**
@@ -644,7 +654,12 @@ function bullet(x,y,width,height,speed,color){
 *@param width  Ancho de la nave enemiga
 *@param height  Altura de la nave enemiga
 */
-function enemy(x,y,width,height){
+function enemy(x,y,width,height,type,ruta){
+	this.type = type;//trata si el objeto es de tipo imagen
+	if(type == "image"){
+		this.image = new Image();
+		this.image.src = ruta;
+	}
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -654,8 +669,13 @@ function enemy(x,y,width,height){
 	/*Pinta la nave enemiga en el canvas*/
 	this.show = function(){
 		ctx = myCanvas.context;
-		ctx.fillStyle = "green";
-		ctx.fillRect(this.x,this.y,this.width,this.height);
+		if(type == "image"){//gestiona si es de tipo imágen
+			ctx.drawImage(this.image,this.x,this.y,this.width,this.height);
+		}else{
+			ctx.fillStyle = "green";
+			ctx.fillRect(this.x,this.y,this.width,this.height);			
+		}
+
 		//Si es nivel 4 o 5 le da movimiento hacia abajo
 		if(lvl == 4 || lvl == 5) this.y += this.speed;
 	}
@@ -675,7 +695,12 @@ function enemy(x,y,width,height){
 *@param width  Ancho del boss
 *@param height  Altura del boss
 */
-function boss(x,y,width,height){
+function boss(x,y,width,height,type,ruta){
+	this.type = type;//trata si el objeto es de tipo imagen
+	if(type == "image"){
+		this.image = new Image();
+		this.image.src = ruta;
+	}
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -697,8 +722,12 @@ function boss(x,y,width,height){
 	/*Dibuja el boss*/
 	this.show = function(){
 		ctx = myCanvas.context;
-		ctx.fillStyle = "red";
-		ctx.fillRect(this.x, this.y, this.width, this.height);
+		if(type == "image"){//gestiona si es de tipo imágen
+			ctx.drawImage(this.image,this.x,this.y,this.width,this.height);
+		} else {
+			ctx.fillStyle = "red";
+			ctx.fillRect(this.x, this.y, this.width, this.height);
+		}
 	}
 
 	/*Le da movimiento al boss*/

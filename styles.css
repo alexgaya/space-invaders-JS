@@ -15,7 +15,7 @@ canvas{
 #developerOptions{
 	margin-top: 10px;
 	text-align: center;
-	/*display: none;*/
+	display: none;
 }
 #setName{
 	height: 500px;
@@ -24,4 +24,7 @@ canvas{
 }
 #setName label{
 	margin-left: -140px;
+}
+#reset{
+	display: none;
 }
